@@ -6,9 +6,9 @@
 
 //braye n>m javab nmidahad
 ////be ezaye x = 7 tx ra hamash 3 midahad what the shit!!!!!
-const int y = 5, x = 8, nos = 2, noo = 3;
+const int y = 9, x = 11, nos = 3, noo = 4;
 int A[x][y];
-int Tx, Ty, Px, Py, Ta, Tb, Pa, Pb;
+int Tx, Ty, Px, Py, Ta, Tb, Pa, Pb, tempx, tempy;
 
 void matrix() {
     for (int j = 0; j < y; j++)
@@ -16,24 +16,42 @@ void matrix() {
             A[i][j] = 0;
 }
 
+void print() {
+    for (int j = 0; j < y; j++) {
+        for (int i = 0; i < x; i++) {
+            if (A[i][j] == 0)
+                printf("|     ");
+            else if (A[i][j] == -1)
+                printf("|  T  ");
+            else if (A[i][j] == -2) {
+                printf("|Dead!");
+                break;
+            } else
+                printf("|  D%d ", A[i][j]);
+        }
+        printf("|\n");
+    }
+    printf("\n");
+}
+
 // eshqal nashode vali else mikhanad
 void first_pos() {
     Tx = 0;
     Ty = 0;
-    printf("Tx=%d,Ty=%d\n", Tx, Ty);
+    //printf("Tx=%d,Ty=%d\n", Tx, Ty);
     srand(time(NULL));
     Tx = rand() % x;   //first position of thief
     Ty = rand() % y;   //first position of thief
     A[Tx][Ty] = -1;
-    printf("Tx=%d,Ty=%d\n", Tx, Ty);
+    //printf("Tx=%d,Ty=%d\n", Tx, Ty);
     for (int i = 1; i <= nos; i++) {
-        printf("nos=%d\n", i);
+        //printf("nos=%d\n", i);
         for (int j = 0; j < noo; j++) {
-            Px=0;
-            Py=0;
+            Px = 0;
+            Py = 0;
             Px = rand() % x;   //first position of police
             Py = rand() % y;   //first position of police
-            printf("Px=%d,Py=%d\n", Px, Py);
+            //printf("Px=%d,Py=%d\n", Px, Py);
             while (1) {
                 if (A[Px][Py] == 0) {
                     A[Px][Py] = i;
@@ -43,7 +61,7 @@ void first_pos() {
                     Py = 0;
                     Px = rand() % x;   //first position of police
                     Py = rand() % y;  //first position of police
-                    printf("else Px=%d,Py=%d\n", Px, Py);
+                    //printf("else Px=%d,Py=%d\n", Px, Py);
                 }
             }
         }
@@ -51,12 +69,11 @@ void first_pos() {
     }
 }
 
-
-
-void thief_move() {
-    A[Tx][Ty] = 0;
-    int temp1 = (rand() % 3);   //move of thief
-    int temp2 = (rand() % 3);//move of thief
+void random_move() {
+    int temp1 = 0;
+    int temp2 = 0;
+    temp1 = (rand() % 3);   //move
+    temp2 = (rand() % 3);   //move
     if (temp1 == 0)
         Ta = 0;
     if (temp1 == 1)
@@ -70,29 +87,21 @@ void thief_move() {
     if (temp2 == 2)
         Tb = -1;
     //printf("ym=%d,xm=%d\n", Tb, Ta);
+}
+
+void thief_move() {
+    A[Tx][Ty] = 0;
+    random_move();
     Tx = Tx + Ta;
     Ty = Ty + Tb;
     while (1) {
-        if ((Tx < x && Tx >= 0) && (Ty >= 0 && Ty < y) && A[Tx][Ty]==0) {
+        if ((Tx < x && Tx >= 0) && (Ty >= 0 && Ty < y) && (A[Tx][Ty] == 0)) {
             A[Tx][Ty] = -1;
             break;
         } else {
             Tx = Tx - Ta;
             Ty = Ty - Tb;
-            temp1 = (rand() % 3);   //move of thief
-            temp2 = (rand() % 3);   //move of thief
-            if (temp1 == 0)
-                Ta = 0;
-            if (temp1 == 1)
-                Ta = 1;
-            if (temp1 == 2)
-                Ta = -1;
-            if (temp2 == 0)
-                Tb = 0;
-            if (temp2 == 1)
-                Tb = 1;
-            if (temp2 == 2)
-                Tb = -1;
+            random_move();
             Tx = Tx + Ta;
             Ty = Ty + Tb;
             //printf("ym=%d,xm=%d\n", Tb, Ta);
@@ -100,54 +109,67 @@ void thief_move() {
     }
 }
 
-void polic_move() {
+int police_check() {
+    tempx = 0;
+    tempy = 0;
+    if ((sqrt(pow(Px - Tx, 2) + pow(Py - Ty, 2))) <= 2.9) {
+        tempx = Px - Tx;
+        tempy = Py - Ty;
+        return 1;
+    }
+    return 0;
+}
+
+void follow_thief() {
+    if (tempx == 0)
+        Pa = 0;
+    else if (tempx == 1 || tempx == 2)
+        Pa = -1;
+    else if (tempx == -1 || tempx == -2)
+        Pa = 1;
+    if (tempy == 0)
+        Pa = 0;
+    else if (tempy == 1 || tempy == 2)
+        Pa = -1;
+    else if (tempy == -1 || tempy == -2)
+        Pa = 1;
+}
+// if (A[i][j] != 0 && A[i][j] != -1)
+//bishtar chap mikonad
+
+int police_move() {
     for (int k = 1; k <= nos; k++) {
         for (int j = 0; j < y; j++) {
             for (int i = 0; i < x; i++) {
                 if (A[i][j] == k) {
                     Px = i;
                     Py = j;
-                    int temp1 = (rand() % 3);   //move of police
-                    int temp2 = (rand() % 3);   //move of police
-                    if (temp1 == 0)
-                        Pa = 0;
-                    if (temp1 == 1)
-                        Pa = 1;
-                    if (temp1 == 2)
-                        Pa = -1;
-                    if (temp2 == 0)
-                        Pb = 0;
-                    if (temp2 == 1)
-                        Pb = 1;
-                    if (temp2 == 2)
-                        Pb = -1;
+                    if (police_check()) {
+                        follow_thief();
+                    } else
+                        random_move();
                     Px = Px + Pa;
                     Py = Py + Pb;
                     while (1) {
-                        if ((Px < x && Px >= 0) && (Py >= 0 && Py < y) && A[Px][Py]==0) {
-                            A[Px][Py] = k;
-                            printf("%d", k);
-                            break;
+                        if ((Px < x && Px >= 0) && (Py >= 0 && Py < y) ) {
+                            if (A[Px][Py] == -1) {
+                                A[Px][Py] = -2;
+                                printf("where\n");
+                                print();
+                                return 0;
+                            } else {
+                                A[Px][Py] = k;
+                                break;
+                            }
                         } else {
                             Px = Px - Pa;
                             Py = Py - Pb;
-                            int temp1 = (rand() % 3);   //move of police
-                            int temp2 = (rand() % 3);   //move of police
-                            if (temp1 == 0)
-                                Pa = 0;
-                            if (temp1 == 1)
-                                Pa = 1;
-                            if (temp1 == 2)
-                                Pa = -1;
-                            if (temp2 == 0)
-                                Pb = 0;
-                            if (temp2 == 1)
-                                Pb = 1;
-                            if (temp2 == 2)
-                                Pb = -1;
+                            if (police_check()) {
+                                follow_thief();
+                            } else
+                                random_move();
                             Px = Px + Pa;
                             Py = Py + Pb;
-                            printf("px=%d,py=%d\n", Px, Py);
                         }
                     }
                     A[Px - Pa][Py - Pb] = 0;
@@ -155,39 +177,46 @@ void polic_move() {
             }
         }
     }
+    return 1;
 }
-// if (A[i][j] != 0 && A[i][j] != -1)
-//bishtar chap mikonad
-void print() {
-    for (int j = 0; j < y; j++) {
-        for (int i = 0; i < x; i++) {
-            if (A[i][j] == 0)
-                printf("|   ");
-            else if (A[i][j] == -1)
-                printf("| T ");
-            else
-                printf("| D%d", A[i][j]);
-        }
-        printf("|\n");
-    }printf("next\n");
 
-}
 
 int main() {
+    //printf("Please tell me size of town like X x Y:");
+    //scanf("%d%d",&x,&y);
+    //printf("Please tell me number of town police stations :");
+    //scanf("%d",&nos);
+    //printf("please tell me number of station officer : ");
+    //scanf("%d",&noo);
+    //printf("Ready !");
+    //sleep(1);
     matrix();
     first_pos();
     print();
-    sleep(1);
     thief_move();
-    //polic_move();
+    police_move();
+    print();
+    thief_move();
+    police_move();
+    print();
+    thief_move();
+    police_move();
+    print();
+    thief_move();
+    police_move();
     print();
     //sleep(1);
-    //system("clear");
     //thief_move();
     //polic_move();
-    //check_thief();
+    //polic_move();
     //print();
+    //sleep(1);
+    //thief_move();
+    //polic_move();
+    //polic_move();
+    // print();
     return 0;
+
 }
 
 
