@@ -5,13 +5,14 @@
 #include <math.h>
 
 //braye n>m javab nmidahad
-const int n = 5, m = 8, nos = 3, noo = 1;
-int A[n][m];
+////be ezaye x = 7 tx ra hamash 3 midahad what the shit!!!!!
+const int y = 5, x = 8, nos = 2, noo = 3;
+int A[x][y];
 int Tx, Ty, Px, Py, Ta, Tb, Pa, Pb;
 
 void matrix() {
-    for (int j = 0; j < n; j++)
-        for (int i = 0; i < m; i++)
+    for (int j = 0; j < y; j++)
+        for (int i = 0; i < x; i++)
             A[i][j] = 0;
 }
 
@@ -19,20 +20,19 @@ void matrix() {
 void first_pos() {
     Tx = 0;
     Ty = 0;
-    //int num = 0;
+    printf("Tx=%d,Ty=%d\n", Tx, Ty);
     srand(time(NULL));
-    Tx = rand() % m;   //first position of thief
-    Ty = rand() % n;   //first position of thief
+    Tx = rand() % x;   //first position of thief
+    Ty = rand() % y;   //first position of thief
     A[Tx][Ty] = -1;
     printf("Tx=%d,Ty=%d\n", Tx, Ty);
     for (int i = 1; i <= nos; i++) {
-        //num++;
         printf("nos=%d\n", i);
         for (int j = 0; j < noo; j++) {
             Px=0;
             Py=0;
-            Px = rand() % m;   //first position of police
-            Py = rand() % n;   //first position of police
+            Px = rand() % x;   //first position of police
+            Py = rand() % y;   //first position of police
             printf("Px=%d,Py=%d\n", Px, Py);
             while (1) {
                 if (A[Px][Py] == 0) {
@@ -41,16 +41,17 @@ void first_pos() {
                 } else {
                     Px = 0;
                     Py = 0;
-                    Px = rand() % m;   //first position of police
-                    Py = rand() % n;  //first position of police
+                    Px = rand() % x;   //first position of police
+                    Py = rand() % y;  //first position of police
                     printf("else Px=%d,Py=%d\n", Px, Py);
                 }
             }
         }
 
     }
-
 }
+
+
 
 void thief_move() {
     A[Tx][Ty] = 0;
@@ -72,7 +73,7 @@ void thief_move() {
     Tx = Tx + Ta;
     Ty = Ty + Tb;
     while (1) {
-        if ((Tx < m && Tx >= 0) && (Ty >= 0 && Ty < n) && A[Tx][Ty]==0) {
+        if ((Tx < x && Tx >= 0) && (Ty >= 0 && Ty < y) && A[Tx][Ty]==0) {
             A[Tx][Ty] = -1;
             break;
         } else {
@@ -101,8 +102,8 @@ void thief_move() {
 
 void polic_move() {
     for (int k = 1; k <= nos; k++) {
-        for (int j = 0; j < n; j++) {
-            for (int i = 0; i < m; i++) {
+        for (int j = 0; j < y; j++) {
+            for (int i = 0; i < x; i++) {
                 if (A[i][j] == k) {
                     Px = i;
                     Py = j;
@@ -123,7 +124,7 @@ void polic_move() {
                     Px = Px + Pa;
                     Py = Py + Pb;
                     while (1) {
-                        if ((Px < m && Px >= 0) && (Py >= 0 && Py < n) && A[Px][Py]==0) {
+                        if ((Px < x && Px >= 0) && (Py >= 0 && Py < y) && A[Px][Py]==0) {
                             A[Px][Py] = k;
                             printf("%d", k);
                             break;
@@ -158,8 +159,8 @@ void polic_move() {
 // if (A[i][j] != 0 && A[i][j] != -1)
 //bishtar chap mikonad
 void print() {
-    for (int j = 0; j < n; j++) {
-        for (int i = 0; i < m; i++) {
+    for (int j = 0; j < y; j++) {
+        for (int i = 0; i < x; i++) {
             if (A[i][j] == 0)
                 printf("|   ");
             else if (A[i][j] == -1)
@@ -176,10 +177,10 @@ int main() {
     matrix();
     first_pos();
     print();
-    //sleep(1);
-    //thief_move();
+    sleep(1);
+    thief_move();
     //polic_move();
-    //print();
+    print();
     //sleep(1);
     //system("clear");
     //thief_move();
