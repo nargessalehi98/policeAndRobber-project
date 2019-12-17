@@ -6,7 +6,7 @@
 
 //braye n>m javab nmidahad
 ////be ezaye x = 7 tx ra hamash 3 midahad what the shit!!!!!
-const int y = 9, x = 11, nos = 3, noo = 4;
+const int y = 9, x = 11, nos = 3, noo = 3;
 int A[x][y];
 int Tx, Ty, Px, Py, Ta, Tb, Pa, Pb, tempx, tempy;
 
@@ -16,17 +16,16 @@ void matrix() {
             A[i][j] = 0;
 }
 
-void print() {
+int print() {
     for (int j = 0; j < y; j++) {
         for (int i = 0; i < x; i++) {
             if (A[i][j] == 0)
                 printf("|     ");
+            else if (A[i][j] == -2)
+                printf("|Dead!");
             else if (A[i][j] == -1)
                 printf("|  T  ");
-            else if (A[i][j] == -2) {
-                printf("|Dead!");
-                break;
-            } else
+            else
                 printf("|  D%d ", A[i][j]);
         }
         printf("|\n");
@@ -151,12 +150,12 @@ int police_move() {
                     Px = Px + Pa;
                     Py = Py + Pb;
                     while (1) {
-                        if ((Px < x && Px >= 0) && (Py >= 0 && Py < y) ) {
+                        if ((Px < x && Px >= 0) && (Py >= 0 && Py < y)) {
                             if (A[Px][Py] == -1) {
                                 A[Px][Py] = -2;
-                                printf("where\n");
-                                print();
-                                return 0;
+                                //printf("where\n");
+                                //print();
+                                //return 0;
                             } else {
                                 A[Px][Py] = k;
                                 break;
@@ -182,42 +181,41 @@ int police_move() {
 
 
 int main() {
-    //printf("Please tell me size of town like X x Y:");
-    //scanf("%d%d",&x,&y);
-    //printf("Please tell me number of town police stations :");
-    //scanf("%d",&nos);
-    //printf("please tell me number of station officer : ");
-    //scanf("%d",&noo);
-    //printf("Ready !");
-    //sleep(1);
     matrix();
     first_pos();
     print();
-    thief_move();
-    police_move();
-    print();
-    thief_move();
-    police_move();
-    print();
-    thief_move();
-    police_move();
-    print();
-    thief_move();
-    police_move();
-    print();
-    //sleep(1);
-    //thief_move();
-    //polic_move();
-    //polic_move();
-    //print();
-    //sleep(1);
-    //thief_move();
-    //polic_move();
-    //polic_move();
-    // print();
-    return 0;
-
+    sleep(1);
+    while (1) {
+        thief_move();
+        print();
+        sleep(1);
+        police_move();
+        sleep(1);
+        print();
+        for (int j = 0; j < y; j++) {
+            for (int i = 0; i < x; i++) {
+                if (A[i][j] = -2) {
+                    printf("\nThe police went to the thief !\n");
+                    return 0;
+                }
+            }
+        }
+    }
 }
+
+
+
+
+
+
+//printf("Please tell me size of town like X x Y:");
+//scanf("%d%d",&x,&y);
+//printf("Please tell me number of town police stations :");
+//scanf("%d",&nos);
+//printf("please tell me number of station officer : ");
+//scanf("%d",&noo);
+//printf("Ready !");
+//sleep(1);
 
 
 
